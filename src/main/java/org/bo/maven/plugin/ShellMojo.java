@@ -7,6 +7,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.bo.maven.plugin.utils.ConsoleProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -203,23 +204,25 @@ public class ShellMojo extends AbstractMojo {
             private long transfered;
             private long max;
             int percentage;
+            ConsoleProgressBar cpb = new ConsoleProgressBar(0, 100, 70, '=');;
             @Override
             public boolean count(long count) {
                 transfered = transfered + count;
                 int newPercentage=(int)((transfered*100)/max);
                 if(percentage!=newPercentage) {
                     percentage=newPercentage;
-                    System.out.print("+++" + percentage + "%");
+                    /*System.out.print("+++" + percentage + "%");
                     if(percentage<100&&percentage %20 ==0){
                         System.out.println();
-                    }
+                    }*/
+                    cpb.show(newPercentage);
                 }
                 return true;
             }
 
             @Override
             public void end() {
-                System.out.println();
+                //System.out.println();
                 System.out.println("Transferring done.");
             }
 
